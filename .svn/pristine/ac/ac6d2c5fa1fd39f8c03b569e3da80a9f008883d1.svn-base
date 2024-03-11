@@ -1,0 +1,133 @@
+@use "sass:color";
+
+$select: ".card" !default;
+
+// config
+@use "../config/colors";
+@use "../config/fonts";
+@use "../config/queries";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/copy";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+%set-card-header {
+    font: 900 1em/1 fonts.get(secondary), sans-serif;
+    font-stretch: semi-expanded;
+}
+
+@mixin base {
+    #{$select} {
+        display: flex;
+        flex-direction: column;
+
+        text-align: center;
+        background: white;
+        box-shadow: 0 0 0.25em color.adjust(colors.get(primary), $alpha: -0.3);
+
+        &__title {
+            font-size: #{convert.to-em(60)};
+            @include background.color-map(
+                colors.get(accent),
+                colors.get(light)
+            );
+            padding: 0.3em;
+        }
+
+        &__title,
+        &__header {
+            @extend %set-card-header;
+        }
+
+        &__group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        &__header {
+            font-size: #{convert.to-em(47)};
+            @media all and (max-width: queries.get(document-lg)) {
+                font-size: 2em;
+                font-size: clamp(2em, 11vw, #{convert.to-em(47)});
+            }
+
+            color: colors.get(accent);
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__orphan {
+            font-size: 75%;
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5em 2.5em;
+            flex: 1 1 auto;
+
+            > * {
+                flex: 0 0 auto;
+            }
+        }
+
+        &__text {
+            margin: 1em 0;
+        }
+
+        &__button {
+            margin-top: auto;
+        }
+
+        @content;
+    }
+}
+
+@mixin primary {
+    #{$select} {
+        &--primary {
+            #{$select} {
+                &__title {
+                    @include background.color-map(
+                        colors.get(primary),
+                        colors.get(light)
+                    );
+                }
+
+                &__header {
+                    color: colors.get(primary);
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin primary-dark {
+    #{$select} {
+        &--primary-dark {
+            #{$select} {
+                &__title {
+                    @include background.color-map(
+                        colors.get(primary-dark),
+                        colors.get(light)
+                    );
+                }
+
+                &__header {
+                    color: colors.get(primary-dark);
+                }
+            }
+
+            @content;
+        }
+    }
+}

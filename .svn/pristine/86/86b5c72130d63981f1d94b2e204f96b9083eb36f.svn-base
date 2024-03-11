@@ -1,0 +1,21 @@
+$select: ".price-count" !default;
+
+@mixin base {
+    #{$select} {
+        [data-count-price-up] {
+            &::before {
+                content: "$";
+            }
+        }
+
+        @content;
+    }
+}
+
+@mixin render-on-hover {
+    #{$select} {
+        &:not(:hover) [data-count-price-up] {
+            display: none;
+        }
+    }
+}

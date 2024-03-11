@@ -1,0 +1,78 @@
+// config
+@use "config/fonts";
+@use "config/colors";
+
+// layouts
+@use "layouts/document";
+@use "layouts/header";
+@use "layouts/nav";
+@use "layouts/content";
+@use "layouts/form";
+@use "layouts/slide";
+@use "layouts/footer";
+
+// components
+@use "../Shared/css/template/dtm/components/sr";
+@use "../Shared/css/template/dtm/components/modal";
+@use "components/fp-nav";
+@use "components/button";
+@use "components/card";
+@use "components/horizon" with (
+    $colors: (
+        text: colors.get(accent),
+        text-accent: colors.get(highlight)
+    ),
+    $font-size: 1em,
+    $arch-height: 13em,
+    $arch-bottom-offset: 10em
+);
+
+// media
+@use "../Shared/css/template/base/media/contain";
+
+// utils
+@use "utils/unit-conversion" as convert;
+
+@include fonts.request;
+@include document.base;
+@include sr.new;
+@include modal.new;
+@include fp-nav.base;
+
+@include nav.base;
+@include header.base;
+@include footer.new;
+
+@include contain.new {
+    &--video {
+        @include contain.ratio(16/9);
+        background: whitesmoke;
+    }
+}
+
+@include button.base;
+@include button.callout;
+
+@include content.base;
+@include content.image-text;
+@include content.title-list-image;
+@include content.text-bg-image;
+@include content.text-video-form;
+@include content.choose-coverage;
+@include content.testimonials;
+@include content.repairs;
+@include content.text;
+
+@include form.base;
+
+@include card.base;
+@include card.primary;
+@include card.primary-dark;
+
+@include slide.base;
+@include slide.carousel;
+
+// car repair section
+@include horizon.base;
+@include horizon.price-count;
+@include horizon.mobile-table;

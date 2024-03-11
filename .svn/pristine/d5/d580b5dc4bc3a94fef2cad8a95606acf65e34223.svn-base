@@ -1,0 +1,59 @@
+$select: ".button" !default;
+
+// config
+@use "../config/colors";
+@use "../config/fonts";
+
+// components
+@use "../../Shared/css/template/base/components/button" with (
+    $select: $select
+);
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+@mixin base {
+    @include button.new(colors.get(primary), colors.get(primary-dark)) {
+        &,
+        &:hover,
+        &:focus {
+            color: white;
+        }
+    }
+
+    #{$select} {
+        font: 900 #{convert.to-rem(20)}/ 1 fonts.get(primary), sans-serif;
+        text-transform: uppercase;
+
+        &::before,
+        &::after {
+            box-shadow: inset 2px 2px 0 currentColor,
+                inset -2px -2px 0 currentColor;
+        }
+
+        &::after {
+            transition: none;
+        }
+
+        @content;
+    }
+}
+
+@mixin callout {
+    #{$select} {
+        &--callout {
+            @include button.color-map(
+                $background-color: colors.get(callout),
+                $text-color: colors.get(callout-dark)
+            );
+
+            &,
+            &:hover,
+            &:focus {
+                color: white;
+            }
+
+            @content;
+        }
+    }
+}

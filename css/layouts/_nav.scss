@@ -1,0 +1,70 @@
+@use "sass:map";
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+@use "../config/queries";
+
+$select: ".nav" !default;
+
+// layouts
+@use "../layouts/header";
+@use "../../Shared/css/template/base/layouts/nav" with (
+    $colors: (
+        background: colors.get(accent),
+        text: colors.get(primary-dark),
+        button-open: white
+    ),
+    $mq: (
+        container-min: queries.get(navbar),
+        container-max: queries.get(navbar)
+    )
+);
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+@mixin base {
+    @include nav.new {
+        a {
+            &:focus,
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        &__link {
+            padding: 1rem;
+            font: 600 #{convert.to-em(20)}/ 1 fonts.get(secondary), sans-serif;
+            font-stretch: semi-expanded;
+            text-transform: uppercase;
+            text-shadow: 0 1px 1px white;
+
+            &:hover,
+            &:focus {
+                background: colors.get(accent-light);
+            }
+        }
+    }
+
+    @include nav.bar {
+        &__hide-on-bar {
+            display: none;
+        }
+    }
+
+    @include nav.drawer {
+        &__logo {
+            flex-basis: 9em;
+            padding-left: 0;
+        }
+
+        @include header.set-header-title {
+            font-size: 1.5em;
+        }
+    }
+
+    #{$select} {
+        @content;
+    }
+}

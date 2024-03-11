@@ -1,0 +1,14 @@
+$select: ".footer" !default;
+
+@use "../../Shared/css/template/base/components/list";
+
+@mixin new {
+    #{$select} {
+        font-size: 0.9em;
+        text-align: center;
+
+        @include list.links;
+
+        @content;
+    }
+}

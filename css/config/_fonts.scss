@@ -1,0 +1,139 @@
+@use "sass:map";
+
+$select: ".font" !default;
+
+$list: (
+    primary: proxima-nova,
+    secondary: bebas-neue-pro
+);
+
+@function get($name) {
+    @return map.get($list, $name);
+}
+
+@mixin selectors {
+    #{$select} {
+        @each $name, $font in $list {
+            &-#{$name} {
+                font-family: $font;
+            }
+        }
+    }
+}
+
+@mixin request {
+    @font-face {
+        font-family: "bebas-neue-pro";
+        src: url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-600.woff2)
+                format("woff2"),
+            url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-600.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-weight: 600;
+    }
+
+    @font-face {
+        font-family: "bebas-neue-pro";
+        src: url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-400.woff2)
+                format("woff2"),
+            url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-400.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-stretch: semi-expanded;
+        font-weight: 400;
+    }
+
+    @font-face {
+        font-family: "bebas-neue-pro";
+        src: url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-expanded-400.woff2)
+                format("woff2"),
+            url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-expanded-400.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-stretch: expanded;
+        font-weight: 400;
+    }
+
+    @font-face {
+        font-family: "bebas-neue-pro";
+        src: url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-500.woff2)
+                format("woff2"),
+            url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-500.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-stretch: semi-expanded;
+        font-weight: 500;
+    }
+
+    @font-face {
+        font-family: "bebas-neue-pro";
+        src: url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-600.woff2)
+                format("woff2"),
+            url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-600.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-stretch: semi-expanded;
+        font-weight: 600;
+    }
+
+    @font-face {
+        font-family: "bebas-neue-pro";
+        src: url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-700.woff2)
+                format("woff2"),
+            url(/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-700.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-stretch: semi-expanded;
+        font-weight: 700;
+    }
+
+    @font-face {
+        font-family: "proxima-nova";
+        src: url(/shared/webfonts/proxima-nova/regular/ProximaNova-Regular.woff2)
+                format("woff2"),
+            url(/shared/webfonts/proxima-nova/regular/ProximaNova-Regular.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-weight: 400;
+    }
+
+    @font-face {
+        font-family: "proxima-nova";
+        src: url(/shared/webfonts/proxima-nova/semibold/ProximaNova-Semibold.woff2)
+                format("woff2"),
+            url(/shared/webfonts/proxima-nova/semibold/ProximaNova-Semibold.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-weight: 600;
+    }
+
+    @font-face {
+        font-family: "proxima-nova";
+        src: url(/shared/webfonts/proxima-nova/bold/ProximaNova-Bold.woff2)
+                format("woff2"),
+            url(/shared/webfonts/proxima-nova/bold/ProximaNova-Bold.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-weight: 700;
+    }
+
+    @font-face {
+        font-family: "proxima-nova";
+        src: url(/shared/webfonts/proxima-nova/black/ProximaNova-Black.woff2)
+                format("woff2"),
+            url(/shared/webfonts/proxima-nova/black/ProximaNova-Black.woff)
+                format("woff");
+        font-display: swap;
+        font-style: normal;
+        font-weight: 900;
+    }
+}

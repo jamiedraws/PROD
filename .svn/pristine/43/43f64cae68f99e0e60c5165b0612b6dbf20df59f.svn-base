@@ -1,0 +1,63 @@
+$select: ".header" !default;
+
+// config
+@use "../config/colors";
+@use "../config/fonts";
+@use "../config/queries";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/group";
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+@mixin set-header-title {
+    &__title {
+        font: 400 #{convert.to-em(40)}/ 1 fonts.get(secondary), sans-serif;
+        font-stretch: expanded;
+
+        b {
+            color: colors.get(primary);
+        }
+
+        @content;
+    }
+}
+
+@mixin base {
+    #{$select} {
+        &__in {
+            @media all and (max-width: queries.get(navbar)) {
+                display: none;
+            }
+        }
+
+        &__group {
+            @include group.contain;
+            align-items: center;
+        }
+
+        &__tagline {
+            display: block;
+            background-color: colors.get(primary);
+            color: colors.get(light);
+            text-align: center;
+            padding: 0.5em;
+            font: 400 #{convert.to-em(20)} fonts.get(secondary), sans-serif;
+            font-stretch: expanded;
+        }
+
+        &__logo {
+            flex-basis: #{convert.to-em(357)};
+        }
+
+        &__title {
+            flex-basis: 17em;
+            text-align: center;
+        }
+
+        @include set-header-title;
+
+        @content;
+    }
+}

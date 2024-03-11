@@ -1,0 +1,178 @@
+@use "sass:math";
+@use "sass:map";
+
+$select: ".horizon" !default;
+
+// config
+@use "../config/colors";
+@use "../config/fonts";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/copy";
+@use "../abstracts/price-count";
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+$colors: () !default;
+$colors: map.merge(
+    (
+        text: white,
+        text-accent: blue
+    ),
+    $colors
+);
+
+$horizon-max-width: 730px;
+$horizon-min-media: $horizon-max-width + 200px;
+
+$font-size: 1em !default;
+$arch-width: 100% !default;
+$arch-height: 9em !default;
+$arch-bottom-offset: 19em !default;
+// new arch curve setting
+$arch-curve: 60% !default;
+
+$number-of-items: 7;
+$max-item-size: math.percentage(math.div(math.div(100, $number-of-items), 100));
+
+@mixin base {
+    #{$select} {
+        text-align: center;
+
+        @media (max-width: $horizon-max-width) {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        &__image {
+            margin: 0 auto;
+        }
+
+        // this sets the center point to create an arch of where the "horizon" of items go
+        &__list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            // implement the arch for larger screen sizes
+            @media (min-width: $horizon-min-media) {
+                max-width: $arch-width;
+                height: $arch-height;
+                margin-bottom: calc(-#{$arch-height} / 2);
+
+                flex-wrap: nowrap;
+                z-index: 3;
+            }
+        }
+
+        &__picture {
+            margin: auto;
+        }
+
+        &__figure {
+            @include copy.separate;
+        }
+
+        &__item {
+            @include copy.separate(0.5rem);
+            padding: 0.6em 0.33em;
+            transition: transform 0.25s;
+            color: map.get($colors, text);
+            flex: 0 1 6em;
+            font: semi-expanded 600 #{convert.to-em(24)}/ 1 fonts.get(secondary),
+                sans-serif;
+
+            @media (min-width: $horizon-min-media) {
+                position: relative;
+                bottom: 0;
+                padding: 0 0.5em;
+                flex: 0 1 $max-item-size;
+                max-width: $max-item-size;
+                margin-top: math.div($arch-height, 2);
+
+                @for $i from 1 through $number-of-items {
+                    @if ($i == 1 or $i == $number-of-items) {
+                        $offset: 0;
+
+                        &:nth-of-type(#{$i}) {
+                            bottom: #{$offset};
+                        }
+                    } @else if ($i < math.div($number-of-items, 2) + 1) {
+                        $offset: $arch-curve *
+                            math.div($i, $number-of-items) *
+                            (2 - math.div($i, $number-of-items));
+
+                        &:nth-of-type(#{$i}),
+                        &:nth-last-of-type(#{$i}) {
+                            bottom: #{$offset};
+                        }
+                    }
+                }
+            }
+        }
+
+        &__detail {
+            color: map.get($colors, text-accent);
+            font-weight: 500;
+        }
+
+        @media (min-width: $horizon-min-media) {
+            &__detail {
+                opacity: 0;
+                transition: opacity 0.75s;
+            }
+
+            &__item:hover {
+                transform: scale(1.2);
+            }
+
+            &__item:hover &__detail {
+                opacity: 1;
+            }
+        }
+
+        @content;
+    }
+}
+
+@mixin price-count {
+    #{$select} {
+        @include price-count.base;
+
+        @media all and (min-width: $horizon-min-media) {
+            @include price-count.render-on-hover;
+        }
+    }
+}
+
+@mixin mobile-table {
+    @media all and (max-width: $horizon-max-width) {
+        #{$select} {
+            &__list {
+                display: block;
+            }
+
+            &__item {
+                display: flex;
+                align-items: center;
+                padding: 0.5em 0.25em;
+                border-bottom: 1px solid #1a5a9e;
+                > * {
+                    flex: 0 1 50%;
+                    margin: 0;
+                }
+                dt {
+                    text-align: left;
+                }
+                dd {
+                    text-align: right;
+                }
+            }
+
+            @content;
+        }
+    }
+}

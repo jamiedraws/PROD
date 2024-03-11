@@ -1,0 +1,340 @@
+$select: ".content" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+@use "../config/queries";
+
+// components
+@use "../../Shared/css/template/base/components/list";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/group";
+@use "../../Shared/css/template/base/abstracts/copy";
+@use "../../Shared/css/template/base/abstracts/position";
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+%set-header {
+    font: 600 #{convert.to-em(40)}/ 1 fonts.get(secondary), Helvetica,
+        sans-serif;
+    color: colors.get(primary);
+
+    @media all and (max-width: queries.get(document-lg)) {
+        font-size: 2em;
+    }
+}
+
+@mixin base {
+    #{$select} {
+        &__title {
+            font: 700 #{convert.to-em(60)}/ 1 fonts.get(secondary), Helvetica,
+                sans-serif;
+            font-stretch: semi-expanded;
+            color: colors.get(primary);
+
+            @media all and (max-width: queries.get(document-lg)) {
+                font-size: 2em;
+                font-size: clamp(2em, 5vw, #{convert.to-em(45)});
+            }
+        }
+
+        &__header {
+            @extend %set-header;
+        }
+
+        &__group {
+            @include group.contain(1rem);
+        }
+
+        &__text {
+            @include copy.separate;
+
+            ul {
+                @extend %set-header;
+                display: inline-block;
+                text-align: left;
+
+                @include list.structure($offset: 1em);
+                @include list.background-icon($url: "/images/checkmark.svg") {
+                    margin-right: 0.6em;
+                    font-size: 0.8em;
+                    align-self: center;
+                }
+            }
+        }
+
+        &__button {
+            text-align: center;
+        }
+
+        dd {
+            @include copy.separate;
+        }
+
+        dt {
+            font-weight: bold;
+
+            &:not(:first-child) {
+                margin-top: 2rem;
+            }
+        }
+
+        @content;
+    }
+}
+
+@mixin text-bg-image {
+    #{$select} {
+        &--text-bg-image {
+            overflow: hidden;
+
+            #{$select} {
+                @media (min-width: convert.to-rem(900, $media: true)) {
+                    &__bg-image {
+                        @include position.center-absolute;
+
+                        width: 100%;
+                        height: auto;
+
+                        @supports (object-fit: cover) {
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                    }
+                }
+
+                &__text {
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    > * {
+                        max-width: 100%;
+                    }
+
+                    @media (min-width: convert.to-rem(900, $media: true)) {
+                        display: inline-flex;
+                        padding: 2em;
+                        background: rgba(255, 255, 255, 0.85);
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+// who we are
+@mixin image-text {
+    #{$select} {
+        &--image-text {
+            #{$select} {
+                &__group {
+                    align-items: center;
+                }
+
+                &__picture {
+                    flex-basis: 29em;
+                }
+
+                &__text {
+                    flex-basis: 29em;
+                }
+
+                @content;
+            }
+        }
+    }
+}
+
+// how it works
+@mixin title-list-image {
+    #{$select} {
+        &--title-list-image {
+            #{$select} {
+                &__title {
+                    text-align: center;
+                    max-width: 12em;
+                }
+
+                &__list {
+                    flex-basis: 28em;
+                }
+
+                &__picture {
+                    flex-basis: 31em;
+                }
+            }
+        }
+
+        @content;
+    }
+}
+
+@mixin text-video-form {
+    #{$select} {
+        &--text-video-form {
+            #{$select} {
+                &__contain-text {
+                    max-width: 29em;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                &__title {
+                    font-size: #{convert.to-em(45)};
+
+                    @media all and (max-width: queries.get(document-lg)) {
+                        font-size: 2em;
+                        font-size: clamp(2em, 5vw, #{convert.to-em(45)});
+                    }
+                }
+
+                &__group,
+                &__form {
+                    margin-top: 0;
+                }
+
+                &__text {
+                    text-align: center;
+                }
+
+                &__group > &__text {
+                    flex: 1 1 30em;
+                }
+
+                &__highlight {
+                    color: colors.get(primary);
+                }
+
+                &__form {
+                    flex: 1 1 25em;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin choose-coverage {
+    #{$select} {
+        &--choose-coverage {
+            background-color: #ddf3ff;
+            text-align: center;
+
+            @include copy.separate;
+
+            #{$select} {
+                &__group {
+                    @include group.gap(0.5rem);
+                    @include group.flexchild(1 1 20em);
+                }
+
+                &__text {
+                    flex-basis: 100%;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin testimonials {
+    #{$select} {
+        &--testimonials {
+            overflow: hidden;
+            text-align: center;
+            background-color: #ddf3ff;
+
+            #{$select} {
+                &__bg-image {
+                    @include position.center-absolute;
+                    width: 100%;
+                    height: auto;
+
+                    @supports (object-fit: cover) {
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    opacity: 0.2;
+                }
+
+                &__text {
+                    padding: 2em 0;
+                }
+
+                &__caption {
+                    font-size: #{convert.to-em(24)};
+                    font-weight: 600;
+                    color: colors.get(primary);
+                }
+
+                &__arrow {
+                    background-color: white;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin repairs {
+    #{$select} {
+        &--repairs {
+            text-align: center;
+
+            @include copy.separate;
+
+            @content;
+        }
+    }
+}
+
+@mixin footer {
+    #{$select} {
+        &--footer {
+            background-color: colors.get(primary-dark);
+            color: colors.get(light);
+            text-align: center;
+            padding: 3em;
+            font: 400 #{convert.to-em(14)} fonts.get(primary), sans-serif;
+            font-stretch: expanded;
+
+            #{$select} {
+                &__sitemap {
+                    display: flex;
+                    justify-content: space-evenly;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin text {
+    #{$select} {
+        &--text {
+            figure {
+            }
+
+            figcaption {
+                font-weight: bold;
+            }
+
+            #{$select} {
+                &__logo {
+                    max-width: #{convert.to-em(300)};
+                }
+            }
+            @content;
+        }
+    }
+}

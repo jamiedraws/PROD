@@ -1,0 +1,295 @@
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage<ClientSiteViewData>" %>
+
+<%@ Import Namespace="Dtm.Framework.ClientSites" %>
+<%@ Import Namespace="PROD.Navigation" %>
+<%@ Import Namespace="PROD.PhoneNumbers" %>
+
+<% 
+    var version = DtmContext.Version;
+    var isIndex = DtmContext.PageCode == "Index";
+    var isPaymentPage = DtmContext.PageCode == "Payment";
+    var isFrontPage = DtmContext.Page.IsStartPageType;
+    var isSubPage = isFrontPage && !isIndex;
+    var isStartPage = DtmContext.Page.IsStartPageType && !isPaymentPage;
+    var isMobile = DtmContext.IsMobile;
+    var isDesktop = !isMobile;
+
+    var dtm = isMobile ? "@mv" : "@dv";
+    var dtmIn = isMobile ? "dtm__in--mv" : "dtm__in--dv";
+    var ext = DtmContext.ApplicationExtension;
+
+    var getTwitterImage = SettingsManager.ContextSettings["SocialPlugins.Twitter.OpenGraphImage"];
+    var getFacebookImage = SettingsManager.ContextSettings["SocialPlugins.Facebook.OpenGraphImage"];
+    var productName = SettingsManager.ContextSettings["Label.ProductName"];
+%>
+
+<!DOCTYPE html>
+<html id="top" lang="en" class="dtm">
+
+<head>
+
+    <title><%= Model.PageTitle %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= Model.PageMetaDescription %>">
+    <meta name="keywords" content="<%= Model.PageMetaKeywords %>">
+
+    <!-- // Open Graph Metadata -->
+    <meta property="og:title" content="<%= Model.PageTitle %>">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="<%= Model.PageMetaDescription %>">
+    <meta property="og:url" content="<%= DtmContext.Domain.FullDomainOfferVersionUrl(DtmContext.PageCode) %>">
+    <meta property="og:image" content="<%= getFacebookImage %>">
+
+    <!-- // Twitter Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= Model.PageTitle %>">
+    <meta name="twitter:description" content="<%= Model.PageMetaDescription %>">
+    <meta name="twitter:image" content="<%= getTwitterImage %>">
+    <meta name="twitter:domain" content="<%= DtmContext.Domain.FullDomainOfferVersionUrl(DtmContext.PageCode) %>">
+
+    <% if (DtmContext.IsProxyIpAddress || DtmContext.CampaignDomains.Any(d => d.DomainId == DtmContext.DomainId && d.Domain.ToLower().Contains("dtmstage")))
+        { %>
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <% }
+    else
+    { %>
+
+    <meta name="google-site-verification" content="<%= Model.PageMetaVerify %>">
+    <meta name="msvalidate.01" content="617F9E44E7841BBC8E57FE0772BB9DD9">
+    <link rel="canonical" href="<%= DtmContext.Domain.FullDomain %>">
+
+    <% } %>
+
+    <% var themeColor = "#62c0ed"; %>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="<%= themeColor %>">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta name="msapplication-TileColor" content="<%= themeColor %>">
+    <meta name="theme-color" content="<%= themeColor %>">
+
+    <% var cb = string.Format("?v={0}", "3"); %>
+    <link rel="preload" href="/css/style.css<%= cb %>" as="style" />
+    <link rel="preload" href="/shared/webfonts/bebas-neue-pro/bebas-neue-pro-expanded-400.woff2" as="font" crossorigin />
+    <link rel="preload" href="/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-600.woff2" as="font" crossorigin />
+    <link rel="preload" href="/shared/webfonts/bebas-neue-pro/bebas-neue-pro-semiexpanded-700.woff2" as="font" crossorigin />
+    <link rel="preload" href="/shared/webfonts/bebas-neue-pro/bebas-neue-pro-600.woff2" as="font" crossorigin />
+    <link rel="preload" href="/shared/webfonts/proxima-nova/regular/ProximaNova-Regular.woff2" as="font" crossorigin />
+    <link rel="stylesheet" href="/css/style.css<%= cb %>" />
+
+
+    <script defer src="/js/slide/slide.js"></script>
+    <script defer src="/js/app.js<%= cb %>"></script>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+</head>
+
+<body class="dtm__in <%= dtmIn %>">
+    <%
+        var sitemap = new Sitemap();
+        var homeLink = sitemap.SitemapList.GetItemById("home");
+        var registerLink = sitemap.SitemapList.GetItemById("register");
+    %>
+    <% if (isStartPage)
+        { %>
+    <header aria-labelledby="header-title" class="view header section">
+        <div class="header__tagline uppercase">PROTECTION YOU CAN TRUST. PEACE OF MIND YOU AND YOUR FAMILY CAN COUNT ON!</div>
+        <div class="view__in header__in section__in">
+            <div class="header__group">
+                <a href="<%= homeLink.Page %>" class="header__logo">
+                    <img
+                        src="/images/logo.svg"
+                        alt="Protection Direct for your peace of mind" />
+                </a>
+
+                <div id="header-title" class="header__title">
+                    The <b>Right Auto Protection</b> for your needs... All for one
+                        low monthly cost.
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav id="nav" aria-label="Website pages links" class="view nav section section--nav">
+        <div class="view__in nav__group section__in">
+            <a href="<%= homeLink.Page %>" class="nav__logo nav__hide-on-bar">
+                <img
+                    src="/images/logo-mobile.svg"
+                    loading="lazy"
+                    alt="Protection Direct for your peace of mind" />
+            </a>
+            <button
+                type="button"
+                class="nav__label"
+                aria-label="Toggle Menu">
+                <span></span>
+            </button>
+            <div
+                class="nav__underlay nav__hide-on-bar"
+                role="presentation">
+            </div>
+            <div class="nav__pane">
+                <div class="nav__group">
+                    <div class="nav__list">
+                        <div class="nav__title nav__link--for-drawer">
+                            The <b>Right Auto Protection</b> for your needs... All
+                                for one low monthly cost.
+                        </div>
+                        <% 
+                            var navFilterIdList = new string[] { "register", "customer-service", "privacy-policy", "sitemap" };
+                            var navList = sitemap.SitemapList.Entries.Where(e => !navFilterIdList.Contains(e.Id));
+
+                            foreach (var navLink in navList)
+                            {
+                        %>
+                        <a class="nav__link" href="<%=navLink.Page %>" id="nav-<%= navLink.Id %>">
+                            <span><%= navLink.Name %></span>
+                        </a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <% } %>
+
+    <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+
+    <footer
+        aria-label="Copyrights and policies"
+        class="view footer section bg bg--primary-dark">
+        <div class="view__in section__in">
+            <% if (isStartPage)
+                { %>
+            <div class="section__block">
+                <nav aria-label="Sitemap">
+                    <ul class="list">
+                        <%
+                            foreach (var entry in sitemap.SitemapList.Entries)
+                            {
+                        %>
+                        <li>
+                            <a
+                                id="sitemap-<%= entry.Id %>"
+                                href="<%= entry.Page %>"
+                                aria-label="<%= entry.Label %>"
+                                title="<%= entry.Label %>"><%= entry.Name %></a>
+                        </li>
+                        <%
+                            }
+                        %>
+                    </ul>
+                </nav>
+
+                <nav class="fp-nav" aria-label="Quick shortcut menu">
+                    <a href="<%= registerLink.Page %>" class="fp-nav__a fp-nav__a--order">
+                        <span>Free Quote</span>
+                    </a>
+                </nav>
+            </div>
+            <% } %>
+            <div class="section__block">
+                <% var copyright = string.Format("&copy; {0} {1}. All Rights Reserved.", DateTime.Now.ToString("yyyy"), productName); %>
+                <address><%= copyright %></address>
+            </div>
+        </div>
+
+        <span class="scripts">
+            <script src="/shared/js/jquery.min.js"></script>
+            <script>const loadFWSnippets = false;</script>
+            <script type="text/javascript" src="/shared/js/common.js?v=<%=  DtmContext.ApplicationVersion %>&language=<%= SettingsManager.ContextSettings["Language.LanguageType", "English"] %>"></script>
+            <% 
+                Html.RenderSiteControls(SiteControlLocation.ContentTop);
+                Html.RenderSiteControls(SiteControlLocation.ContentBottom);
+                Html.RenderSiteControls(SiteControlLocation.PageBottom);
+            %>
+        </span>
+
+        <svg class="svg-symbols">
+            <symbol
+                id="icon-phone"
+                viewBox="0 0 523.82 523.65">
+                <path
+                    d="M1847.6,697.47q1.56,11.92-7.25,20.74l-68.95,68.43a38.91,38.91,0,0,1-12.2,8.82,50.17,50.17,0,0,1-14.77,4.66c-.35,0-1.38.1-3.11.27s-4,.25-6.74.25q-9.84,0-31.88-3.36t-53.92-16.61q-31.9-13.21-72.33-39.65t-86.07-72.58q-36.29-35.78-60.13-68.43t-38.37-60.4q-14.52-27.75-21.78-50.29t-9.84-38.9q-2.61-16.31-2.09-25.65c.35-6.23.53-9.68.53-10.37a50.29,50.29,0,0,1,4.67-14.77,38.61,38.61,0,0,1,8.81-12.19l69-68.95c4.85-4.84,10.37-7.26,16.6-7.26a19.24,19.24,0,0,1,11.92,3.9,35.63,35.63,0,0,1,8.81,9.58L1533.94,430a25.19,25.19,0,0,1,2.59,18.14,32.29,32.29,0,0,1-8.81,16.59l-25.41,25.41a8.56,8.56,0,0,0-1.81,3.38,12.38,12.38,0,0,0-.78,3.89c1.38,7.24,4.49,15.56,9.33,24.89q6.21,12.4,19.19,30.32t36.81,41.2q23.33,23.88,41.47,37.08t30.34,19.45q12.18,6.23,18.66,7.51l6.47,1.3a12.52,12.52,0,0,0,3.38-.79,8.68,8.68,0,0,0,3.36-1.8l29.55-30.09a31.86,31.86,0,0,1,21.78-8.27q8.82,0,14,3.11h.51l100.06,59.1C1841.9,684.86,1846.21,690.54,1847.6,697.47Z"
+                    transform="translate(-1358.09 -276.99)" />
+                <path
+                    d="M1733.79,573.88a17.5,17.5,0,0,1-17.5-17.5A113.91,113.91,0,0,0,1602.51,442.6a17.5,17.5,0,0,1,0-35c82,0,148.78,66.75,148.78,148.78A17.49,17.49,0,0,1,1733.79,573.88Z"
+                    transform="translate(-1358.09 -276.99)" />
+                <path
+                    d="M1798.77,573.88a17.5,17.5,0,0,1-17.5-17.5c0-98.56-80.19-178.75-178.76-178.75a17.5,17.5,0,0,1,0-35,213.75,213.75,0,0,1,213.76,213.75A17.49,17.49,0,0,1,1798.77,573.88Z"
+                    transform="translate(-1358.09 -276.99)" />
+                <path
+                    d="M1864.41,573.88a17.5,17.5,0,0,1-17.5-17.5c0-134.76-109.64-244.39-244.4-244.39a17.5,17.5,0,0,1,0-35,279.39,279.39,0,0,1,279.4,279.39A17.49,17.49,0,0,1,1864.41,573.88Z"
+                    transform="translate(-1358.09 -276.99)" />
+            </symbol>
+            <symbol id="icon-arrows" x="0px" y="0px" viewBox="0 0 11.2 15">
+                <path d="M11.2,5.7H0l5.6-5.6L11.2,5.7z"></path>
+                <path d="M11.2,9.3L5.6,15L0,9.3H11.2z"></path>
+            </symbol>
+            <symbol id="icon-chevron-thin-left" viewBox="0 0 20 20">
+                <path d="M13.891 17.418c0.268 0.272 0.268 0.709 0 0.979s-0.701 0.271-0.969 0l-7.83-7.908c-0.268-0.27-0.268-0.707 0-0.979l7.83-7.908c0.268-0.27 0.701-0.27 0.969 0s0.268 0.709 0 0.979l-7.141 7.419 7.141 7.418z"></path>
+            </symbol>
+            <symbol id="icon-chevron-thin-right" viewBox="0 0 20 20">
+                <path d="M13.25 10l-7.141-7.42c-0.268-0.27-0.268-0.707 0-0.979 0.268-0.27 0.701-0.27 0.969 0l7.83 7.908c0.268 0.271 0.268 0.709 0 0.979l-7.83 7.908c-0.268 0.271-0.701 0.27-0.969 0s-0.268-0.707 0-0.979l7.141-7.417z"></path>
+            </symbol>
+        </svg>
+    </footer>
+
+    <div class="modal" role="dialog" aria-labelledby="modal-text">
+        <div class="modal__load-state"></div>
+        <div id="modal-text" class="modal__text">Loading</div>
+    </div>
+
+    <% Html.RenderSnippet("ORDERFORMSCRIPT"); %>
+
+    <%-- For keep state of How'd You Drop down --%>
+    <%
+        var year = ViewData["Year"] ?? string.Empty;
+        var make = ViewData["Make"] ?? string.Empty;
+        var model = ViewData["ModelCar"] ?? string.Empty;
+        var mileage = ViewData["Mileage"] ?? string.Empty;
+                                %>
+    <script>
+        var yearValue = '<%=year%>';
+        var makeValue = '<%=make%>';
+        var mileageValue = '<%=mileage%>';
+
+        $(window).on('load', function () {
+            if (makeValue.length > 0) {
+                $("#Make").val(makeValue);
+                $("#Make").change();
+            }
+
+            if (yearValue.length > 0) {
+                $("#Year").val(yearValue);
+            }
+
+            if (mileageValue.length > 0) {
+                $("#Mileage").val(mileageValue);
+            }
+
+        });
+
+        registerEvent("loadModelState", function () {
+            var modelValue = '<%=model%>';
+
+            if (modelValue.length > 0) {
+                $("#ModelCar").val(modelValue);
+            }
+        })
+
+    </script>
+
+    <%= Model.FrameworkVersion %>
+</body>
+
+</html>

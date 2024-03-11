@@ -1,0 +1,63 @@
+$select: ".slide" !default;
+
+// config
+@use "../config/colors";
+@use "../config/queries";
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+// layouts
+@use "../../Shared/css/template/base/layouts/slide" with (
+    $desktop: convert.to-rem(1000)
+);
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/group";
+
+@mixin base {
+    @include slide.new;
+
+    #{$select} {
+        @content;
+    }
+}
+
+@mixin carousel {
+    #{$select} {
+        &--carousel {
+            #{$select} {
+                &__into {
+                    max-width: 40em;
+                    margin: auto;
+                }
+
+                &__button {
+                    border-color: transparent;
+                    color: colors.get(primary);
+                }
+
+                &__icon {
+                    stroke: none;
+                    fill: currentColor;
+                }
+
+                &__button:hover,
+                &__button:focus {
+                    background: #f0faff;
+                    color: colors.get(primary);
+                }
+
+                @media all and (max-width: slide.$desktop) {
+                    &__nav {
+                        @include group.contain;
+                        @include group.flexchild(1 1 auto);
+                        padding-top: 1rem;
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+}

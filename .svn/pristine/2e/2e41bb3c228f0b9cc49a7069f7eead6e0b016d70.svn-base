@@ -1,0 +1,34 @@
+$select: ".fp-nav" !default;
+
+// config
+@use "../config/colors";
+@use "../config/queries";
+
+// components
+@use "../../Shared/css/template/dtm/components/fp-nav";
+
+// utils
+@use "../utils/unit-conversion" as convert;
+
+@mixin base {
+    @include fp-nav.new;
+
+    @media all and (min-width: queries.get(navbar)) {
+        @include fp-nav.hide;
+    }
+
+    #{$select} {
+        font-size: 1em;
+
+        &__a--order {
+            background: colors.get(callout);
+
+            &:hover,
+            &:focus {
+                background: colors.get(callout-dark);
+            }
+        }
+
+        @content;
+    }
+}

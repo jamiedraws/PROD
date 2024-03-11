@@ -1,0 +1,95 @@
+@use "sass:map";
+@use "sass:color";
+
+$sizes: (
+    desktop: 64.25rem,
+    base-font: 1.15
+);
+
+// utils
+@use "../utils/unit-conversion" as convert with (
+    $base: map.get($sizes, base-font)
+);
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+@use "../config/queries";
+
+// layouts
+@use "../../Shared/css/template/base/layouts/document";
+@use "../../Shared/css/template/base/layouts/view" with (
+    $breakpoint: queries.get(navbar)
+);
+@use "../../Shared/css/template/base/layouts/section" with (
+    $frame: 2rem 1rem,
+    $container: map.get($sizes, desktop)
+);
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+@mixin base {
+    @include document.base;
+    @include view.new;
+    @include view.set-anchor-position(
+        $static-amount: #{convert.to-em(56)},
+        $dynamic-amount: #{convert.to-em(56)}
+    );
+    @include section.new {
+        &--nav &__in {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        &--main &__in {
+            padding-top: 0;
+        }
+    }
+
+    html {
+        font: 500 #{map.get($sizes, base-font)}rem/ 1.45 fonts.get(primary),
+            sans-serif;
+
+        @include background.color-map(colors.get(light), colors.get(base));
+    }
+
+    @include background.new;
+    @include background.contain;
+    @include background.image;
+
+    @include list-marker {
+        background-image: url(/images/icons/chevron.svg);
+    }
+
+    @include background.name-color-map(
+        "primary",
+        colors.get(primary),
+        colors.get(light)
+    );
+
+    @include background.name-color-map(
+        "primary-dark",
+        colors.get(primary-dark),
+        colors.get(light)
+    );
+
+    @include background.name-color-map(
+        "accent",
+        colors.get(accent),
+        colors.get(primary)
+    ) {
+        @include list-marker {
+            background-image: url(/images/icons/chevron-primary.svg);
+        }
+    }
+
+    @content;
+}
+
+@mixin list-marker {
+    ul > li::before,
+    ol > li::before {
+        @content;
+    }
+}
